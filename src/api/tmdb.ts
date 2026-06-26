@@ -1,7 +1,7 @@
 import type { Movie, MovieDetail, Genre, TMDBDiscoverResponse, TMDBGenreResponse, FilterState } from '../types/movie'
 import { ERA_RANGES } from '../types/movie'
 
-const BASE_URL = 'https://api.themoviedb.org/3'
+const BASE_URL = 'https://tmdb-proxy.1109458232.workers.dev'
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY
 const MAX_PAGES = 25 // 最多拉 25 页 = 500 部电影
 
