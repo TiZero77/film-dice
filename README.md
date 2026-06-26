@@ -1,50 +1,59 @@
 # Film Dice 🎬🎲
 
-随机选片器 — 从高分片库中抽卡，发现你没看过的好电影。
+A random movie picker that draws cards from a curated pool of highly-rated films — discover great movies you haven't seen yet.
 
-## 功能
+[中文文档](./README_CN.md)
 
-- 🎲 随机抽卡（5 张卡牌翻牌动画）
-- 🔍 多维筛选（类型/年代/评分/语言/片长）
-- 📋 想看/已看列表
-- 📜 抽取历史
-- 🌙 明暗主题切换
+## Features
 
-## 在线体验
+- 🎲 Random card draw with flip animation (5 cards at a time)
+- 🔍 Multi-dimensional filters (genre / era / rating / language / runtime)
+- 📋 Want-to-watch & watched lists
+- 📜 Draw history
+- 🌙 Dark / light theme toggle
+- 🎬 Movie pool viewer (up to 500 films)
+
+## Live Demo
 
 👉 https://tizero77.github.io/film-dice/
 
-## 本地开发
+## Getting Started
 
-### 1. 克隆项目
+### Prerequisites
+
+- Node.js 18+
+- A [TMDB](https://www.themoviedb.org/) API key (free)
+- A [Supabase](https://supabase.com/) project (free tier)
+
+### 1. Clone the repo
 
 ```bash
 git clone https://github.com/TiZero77/film-dice.git
 cd film-dice
 ```
 
-### 2. 安装依赖
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. 配置环境变量
+### 3. Configure environment variables
 
-复制 `.env.example` 为 `.env`，填入你的 API Key：
+Copy `.env.example` to `.env` and fill in your API keys:
 
 ```bash
 cp .env.example .env
 ```
 
-需要两个 Key：
+You need two keys:
 
-- **TMDB API Key** — 免费注册：https://www.themoviedb.org/settings/api
-- **Supabase** — 免费注册：https://supabase.com ，创建项目后在 Settings → API 获取
+- **TMDB API Key** — register at https://www.themoviedb.org/settings/api
+- **Supabase URL & Anon Key** — create a project at https://supabase.com, then find them in Settings → API
 
-### 4. 创建数据库表
+### 4. Create database tables
 
-在 Supabase Dashboard → SQL Editor 执行：
+Go to Supabase Dashboard → SQL Editor and run:
 
 ```sql
 CREATE TABLE watchlist (
@@ -83,23 +92,33 @@ CREATE POLICY "Allow all for watched" ON watched FOR ALL USING (true);
 CREATE POLICY "Allow all for draw_history" ON draw_history FOR ALL USING (true);
 ```
 
-### 5. 启动开发服务器
+### 5. Start the dev server
 
 ```bash
 npm run dev
 ```
 
-打开 http://localhost:5173
+Open http://localhost:5173
 
-## 技术栈
+## Tech Stack
 
-- React 18 + Vite
-- Zustand（状态管理）
-- TanStack Query（数据请求）
-- Framer Motion（动画）
-- TMDB API（电影数据）
-- Supabase（用户数据存储）
+- [React 18](https://react.dev/) + [Vite](https://vitejs.dev/)
+- [Zustand](https://github.com/pmndrs/zustand) — state management
+- [TanStack Query](https://tanstack.com/query) — data fetching & caching
+- [Framer Motion](https://www.framer.com/motion/) — animations
+- [TMDB API](https://developer.themoviedb.org/) — movie data
+- [Supabase](https://supabase.com/) — user data storage
 
-## 开源协议
+## Contributing
+
+Contributions are welcome! Feel free to open issues and pull requests.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
 
 MIT
