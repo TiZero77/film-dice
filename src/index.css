@@ -1,1 +1,12 @@
+/* src/index.css */
 @import "tailwindcss";
+@import "./styles/theme.css";
+
+@theme {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+}
