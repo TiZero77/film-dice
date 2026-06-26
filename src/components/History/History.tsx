@@ -14,19 +14,15 @@ function HistoryRow({ movieId, drawnAt }: { movieId: number; drawnAt: string }) 
   })
 
   return (
-    <div className="flex items-center gap-3 py-2">
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0' }}>
       {movie.poster_path ? (
-        <img
-          src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
-          alt={movie.title}
-          className="w-8 h-12 object-cover rounded"
-        />
+        <img src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`} alt={movie.title} style={{ width: 32, height: 48, objectFit: 'cover', borderRadius: 4 }} />
       ) : (
-        <div className="w-8 h-12 bg-card rounded flex items-center justify-center text-xs text-muted">?</div>
+        <div style={{ width: 32, height: 48, background: 'var(--card)', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: 'var(--muted)' }}>?</div>
       )}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm truncate">{movie.title}</p>
-        <p className="text-xs text-muted">{date}</p>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{ fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{movie.title}</p>
+        <p style={{ fontSize: 11, color: 'var(--muted)' }}>{date}</p>
       </div>
     </div>
   )
@@ -39,8 +35,8 @@ export function History() {
 
   return (
     <section>
-      <h3 className="text-sm font-medium text-muted mb-2">抽取历史</h3>
-      <div className="flex flex-col max-h-48 overflow-y-auto">
+      <h3 style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', marginBottom: 8 }}>抽取历史</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', maxHeight: 200, overflowY: 'auto' }}>
         {history.map((item) => (
           <HistoryRow key={item.id} movieId={item.movie_id} drawnAt={item.drawn_at} />
         ))}

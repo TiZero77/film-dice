@@ -7,7 +7,7 @@ interface SidebarProps {
 
 export function Sidebar({ children }: SidebarProps) {
   return (
-    <aside className="w-64 border-r border-border p-4 overflow-y-auto flex flex-col gap-6">
+    <aside style={{ width: 260, borderRight: '1px solid var(--border)', padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 24, flexShrink: 0 }}>
       {children}
     </aside>
   )

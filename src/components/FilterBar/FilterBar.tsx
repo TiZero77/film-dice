@@ -11,26 +11,29 @@ const ERA_LABELS: Record<EraOption, string> = {
   recent: '近5年',
 }
 
+const tagStyle = (active: boolean): React.CSSProperties => ({
+  padding: '4px 10px',
+  fontSize: 12,
+  borderRadius: 999,
+  border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+  background: active ? 'var(--accent)' : 'transparent',
+  color: active ? 'var(--bg)' : 'var(--muted)',
+  cursor: 'pointer',
+  transition: 'all 0.2s',
+})
+
 export function FilterBar() {
   const { filters, toggleGenre, setEra, setMinRating, setMaxRating, setLanguage, setMaxRuntime } = useMovieStore()
   const { data: genres = [] } = useGenres()
 
   return (
-    <div className="flex flex-col gap-5">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* 类型 */}
       <section>
-        <h3 className="text-sm font-medium text-muted mb-2">类型</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', marginBottom: 8 }}>类型</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {genres.map((genre) => (
-            <button
-              key={genre.id}
-              onClick={() => toggleGenre(genre.id)}
-              className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
-                filters.genres.includes(genre.id)
-                  ? 'bg-accent text-bg border-accent'
-                  : 'border-border text-muted hover:border-accent hover:text-accent'
-              }`}
-            >
+            <button key={genre.id} onClick={() => toggleGenre(genre.id)} style={tagStyle(filters.genres.includes(genre.id))}>
               {genre.name}
             </button>
           ))}
@@ -39,18 +42,10 @@ export function FilterBar() {
 
       {/* 年代 */}
       <section>
-        <h3 className="text-sm font-medium text-muted mb-2">年代</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', marginBottom: 8 }}>年代</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {Object.entries(ERA_LABELS).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setEra(filters.era === key ? null : key as EraOption)}
-              className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
-                filters.era === key
-                  ? 'bg-accent text-bg border-accent'
-                  : 'border-border text-muted hover:border-accent hover:text-accent'
-              }`}
-            >
+            <button key={key} onClick={() => setEra(filters.era === key ? null : key as EraOption)} style={tagStyle(filters.era === key)}>
               {label}
             </button>
           ))}
@@ -59,61 +54,35 @@ export function FilterBar() {
 
       {/* 评分 */}
       <section>
-        <h3 className="text-sm font-medium text-muted mb-2">
+        <h3 style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', marginBottom: 8 }}>
           评分 {filters.minRating.toFixed(1)} - {filters.maxRating.toFixed(1)}
         </h3>
-        <div className="flex gap-2 items-center">
-          <input
-            type="range"
-            min={5}
-            max={9}
-            step={0.5}
-            value={filters.minRating}
-            onChange={(e) => setMinRating(Number(e.target.value))}
-            className="flex-1 accent-accent"
-          />
-          <input
-            type="range"
-            min={5}
-            max={10}
-            step={0.5}
-            value={filters.maxRating}
-            onChange={(e) => setMaxRating(Number(e.target.value))}
-            className="flex-1 accent-accent"
-          />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input type="range" min={5} max={9} step={0.5} value={filters.minRating} onChange={(e) => setMinRating(Number(e.target.value))} style={{ flex: 1, accentColor: 'var(--accent)' }} />
+          <input type="range" min={5} max={10} step={0.5} value={filters.maxRating} onChange={(e) => setMaxRating(Number(e.target.value))} style={{ flex: 1, accentColor: 'var(--accent)' }} />
         </div>
       </section>
 
       {/* 语言 */}
       <section>
-        <h3 className="text-sm font-medium text-muted mb-2">语言</h3>
+        <h3 style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', marginBottom: 8 }}>语言</h3>
         <select
           value={filters.language}
           onChange={(e) => setLanguage(e.target.value)}
-          className="w-full px-3 py-1.5 text-sm bg-card border border-border rounded-lg focus:outline-none focus:border-accent"
+          style={{ width: '100%', padding: '6px 12px', fontSize: 13, background: 'var(--card)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 8 }}
         >
           {LANGUAGE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
       </section>
 
       {/* 片长 */}
       <section>
-        <h3 className="text-sm font-medium text-muted mb-2">片长</h3>
-        <div className="flex flex-wrap gap-1.5">
+        <h3 style={{ fontSize: 13, fontWeight: 500, color: 'var(--muted)', marginBottom: 8 }}>片长</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {RUNTIME_OPTIONS.map((opt) => (
-            <button
-              key={String(opt.value)}
-              onClick={() => setMaxRuntime(opt.value)}
-              className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
-                filters.maxRuntime === opt.value
-                  ? 'bg-accent text-bg border-accent'
-                  : 'border-border text-muted hover:border-accent hover:text-accent'
-              }`}
-            >
+            <button key={String(opt.value)} onClick={() => setMaxRuntime(opt.value)} style={tagStyle(filters.maxRuntime === opt.value)}>
               {opt.label}
             </button>
           ))}

@@ -5,6 +5,35 @@ import { useWatchlist } from '../../hooks/useWatchlist'
 import { useWatched } from '../../hooks/useWatched'
 import { useDrawHistory } from '../../hooks/useDrawHistory'
 
+const btnBase: React.CSSProperties = {
+  padding: '8px 16px',
+  fontSize: 13,
+  borderRadius: 8,
+  cursor: 'pointer',
+  transition: 'all 0.2s',
+}
+
+const btnOutline: React.CSSProperties = {
+  ...btnBase,
+  background: 'transparent',
+  border: '1px solid var(--accent)',
+  color: 'var(--accent)',
+}
+
+const btnPrimary: React.CSSProperties = {
+  ...btnBase,
+  background: 'var(--accent)',
+  border: 'none',
+  color: 'var(--bg)',
+}
+
+const btnGhost: React.CSSProperties = {
+  ...btnBase,
+  background: 'transparent',
+  border: '1px solid var(--border)',
+  color: 'var(--muted)',
+}
+
 export function MovieCard() {
   const { selectedCard, resetDraw } = useMovieStore()
   const { data: detail } = useMovieDetail(selectedCard?.id ?? null)
@@ -19,79 +48,49 @@ export function MovieCard() {
   const rating = movie.vote_average?.toFixed(1) ?? '-'
   const runtime = detail?.runtime ? `${detail.runtime}分钟` : ''
 
-  const handleWatchlist = () => {
-    watchlist.add.mutate(movie.id)
-  }
-
-  const handleWatched = () => {
-    watched.add.mutate({ movieId: movie.id })
-    drawHistory.add.mutate(movie.id)
-  }
-
-  const handleRedraw = () => {
-    resetDraw()
-  }
-
   return (
-    <div className="flex gap-6 max-w-2xl mx-auto">
+    <div style={{ display: 'flex', gap: 24, maxWidth: 640, margin: '0 auto' }}>
       {/* 海报 */}
-      <div className="flex-shrink-0 w-[200px]">
+      <div style={{ flexShrink: 0, width: 200 }}>
         {movie.poster_path ? (
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-            className="w-full rounded-lg shadow-lg"
+            style={{ width: '100%', borderRadius: 8, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
           />
         ) : (
-          <div className="w-full h-[300px] bg-card rounded-lg flex items-center justify-center text-muted">
+          <div style={{ width: '100%', height: 300, background: 'var(--card)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
             无海报
           </div>
         )}
       </div>
 
       {/* 详情 */}
-      <div className="flex flex-col gap-3 flex-1 min-w-0">
-        <h2 className="text-2xl font-bold">{movie.title}</h2>
-        <div className="flex items-center gap-3 text-sm text-muted">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1, minWidth: 0 }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700 }}>{movie.title}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: 'var(--muted)' }}>
           <span>{year}</span>
-          <span className="text-accent font-medium">⭐ {rating}</span>
+          <span style={{ color: 'var(--accent)', fontWeight: 500 }}>⭐ {rating}</span>
           {runtime && <span>{runtime}</span>}
         </div>
         {detail?.genres && (
-          <div className="flex flex-wrap gap-1.5">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {detail.genres.map((g) => (
-              <span key={g.id} className="px-2 py-0.5 text-xs border border-border rounded-full text-muted">
+              <span key={g.id} style={{ padding: '2px 8px', fontSize: 11, border: '1px solid var(--border)', borderRadius: 999, color: 'var(--muted)' }}>
                 {g.name}
               </span>
             ))}
           </div>
         )}
-        {movie.overview && (
-          <p className="text-sm text-muted leading-relaxed line-clamp-4">
-            {movie.overview}
-          </p>
-        )}
+        <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6 }}>
+          {movie.overview || '暂无简介'}
+        </p>
 
         {/* 操作按钮 */}
-        <div className="flex gap-3 mt-4">
-          <button
-            onClick={handleWatchlist}
-            className="px-4 py-2 text-sm border border-accent text-accent rounded-lg hover:bg-accent hover:text-bg transition-colors"
-          >
-            想看
-          </button>
-          <button
-            onClick={handleWatched}
-            className="px-4 py-2 text-sm bg-accent text-bg rounded-lg hover:opacity-90 transition-opacity"
-          >
-            已看
-          </button>
-          <button
-            onClick={handleRedraw}
-            className="px-4 py-2 text-sm border border-border text-muted rounded-lg hover:border-accent hover:text-accent transition-colors"
-          >
-            再抽一次
-          </button>
+        <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+          <button onClick={() => watchlist.add.mutate(movie.id)} style={btnOutline}>想看</button>
+          <button onClick={() => { watched.add.mutate({ movieId: movie.id }); drawHistory.add.mutate(movie.id) }} style={btnPrimary}>已看</button>
+          <button onClick={resetDraw} style={btnGhost}>再抽一次</button>
         </div>
       </div>
     </div>

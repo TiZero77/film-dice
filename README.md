@@ -1,32 +1,89 @@
-# React + TypeScript + Vite
+# TiZero 随机电影抽取
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+从高分片库中随机抽卡，发现你没看过的好电影。
 
-Currently, two official plugins are available:
+## 启动项目
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 第一步：打开终端
 
-## React Compiler
+Mac 用户打开 **终端**（Terminal），可以在启动台搜索"终端"。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 第二步：进入项目目录
 
-## Expanding the Oxlint configuration
+复制粘贴以下命令，按回车：
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+cd /Users/neo/Documents/随机电影清单推荐-抽取/tizero
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### 第三步：启动开发服务器
+
+```bash
+npm run dev
+```
+
+看到类似这样的输出就说明启动成功了：
+
+```
+VITE v8.x.x  ready in xxx ms
+
+➜  Local:   http://localhost:5173/
+```
+
+### 第四步：打开浏览器
+
+在浏览器地址栏输入：
+
+```
+http://localhost:5173
+```
+
+即可看到项目页面。
+
+### 关闭项目
+
+在终端按 `Ctrl + C` 可以停止服务器。
+
+---
+
+## 常见问题
+
+### 页面打不开？
+
+检查终端有没有报错。如果端口被占用，可以换个端口启动：
+
+```bash
+npm run dev -- --port 3000
+```
+
+然后访问 `http://localhost:3000`
+
+### npm 命令提示找不到？
+
+确保你在 `tizero` 目录下（终端路径末尾应该是 `tizero`）。
+
+### 抽取电影没反应？
+
+检查 `.env` 文件里的 API Key 是否正确。文件位置：`tizero/.env`
+
+---
+
+## 项目结构（简单了解）
+
+```
+tizero/
+├── src/              ← 源代码
+│   ├── components/   ← 页面组件
+│   ├── api/          ← API 请求
+│   ├── hooks/        ← 数据钩子
+│   ├── stores/       ← 状态管理
+│   └── types/        ← 类型定义
+├── .env              ← API 密钥（不要泄露）
+└── package.json      ← 项目配置
+```
+
+## 技术栈
+
+- React + Vite + TailwindCSS
+- TMDB API（电影数据）
+- Supabase（用户数据存储）

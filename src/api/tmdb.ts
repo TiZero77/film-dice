@@ -3,6 +3,7 @@ import { ERA_RANGES } from '../types/movie'
 
 const BASE_URL = 'https://api.themoviedb.org/3'
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY
+const MAX_PAGES = 25 // 最多拉 25 页 = 500 部电影
 
 async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   const url = new URL(`${BASE_URL}${endpoint}`)
@@ -25,11 +26,11 @@ export async function fetchGenres(): Promise<Genre[]> {
   return data.genres
 }
 
-// 根据筛选条件发现电影（多页）
-export async function discoverMovies(filters: FilterState, pages: number = 3): Promise<Movie[]> {
+// 根据筛选条件发现电影（自动拉取尽可能多的页，上限 500 部）
+export async function discoverMovies(filters: FilterState): Promise<Movie[]> {
   const params: Record<string, string> = {
-    'vote_count.gte': '100',         // 保证评分可信度
-    'sort_by': 'vote_average.desc',
+    'vote_count.gte': '1000',        // 只要真正热门的电影
+    'sort_by': 'popularity.desc',    // 热度优先
     'vote_average.gte': String(filters.minRating),
     'vote_average.lte': String(filters.maxRating),
   }
@@ -52,15 +53,23 @@ export async function discoverMovies(filters: FilterState, pages: number = 3): P
     params['with_runtime.lte'] = String(filters.maxRuntime)
   }
 
-  // 并发请求多页
-  const pageNumbers = Array.from({ length: pages }, (_, i) => i + 1)
+  // 第一页：获取总数
+  const firstPage = await tmdbFetch<TMDBDiscoverResponse>('/discover/movie', { ...params, page: '1' })
+  const totalPages = Math.min(firstPage.total_pages, MAX_PAGES)
+
+  if (totalPages <= 1) {
+    return firstPage.results
+  }
+
+  // 剩余页并发请求
+  const remainingPages = Array.from({ length: totalPages - 1 }, (_, i) => i + 2)
   const responses = await Promise.all(
-    pageNumbers.map(page =>
+    remainingPages.map(page =>
       tmdbFetch<TMDBDiscoverResponse>('/discover/movie', { ...params, page: String(page) })
     )
   )
 
-  return responses.flatMap(r => r.results)
+  return [...firstPage.results, ...responses.flatMap(r => r.results)]
 }
 
 // 获取电影详情

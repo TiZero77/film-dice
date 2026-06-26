@@ -15,7 +15,7 @@ export function useGenres() {
 export function useDiscoverMovies(filters: FilterState) {
   return useQuery({
     queryKey: ['movies', filters],
-    queryFn: () => discoverMovies(filters, 3),
+    queryFn: () => discoverMovies(filters),
     staleTime: 5 * 60 * 1000,
   })
 }

@@ -5,13 +5,13 @@ export function Header() {
   const { isDark, toggleTheme } = useMovieStore()
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 border-b border-border">
-      <h1 className="text-xl font-bold tracking-wider text-accent">
+    <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid var(--border)' }}>
+      <h1 style={{ fontSize: 20, fontWeight: 700, letterSpacing: 2, color: 'var(--accent)' }}>
         TiZero
       </h1>
       <button
         onClick={toggleTheme}
-        className="p-2 rounded-lg hover:bg-card transition-colors text-lg"
+        style={{ padding: 8, borderRadius: 8, fontSize: 18, background: 'transparent', border: 'none', cursor: 'pointer' }}
         aria-label="切换主题"
       >
         {isDark ? '☀️' : '🌙'}
